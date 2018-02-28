@@ -26,6 +26,19 @@ export default class ListaContainer extends React.Component{
             state[evento.target.name] = evento.target.value;
             this.setState(state);
         }
+
+        this.removeTarefa = (index) => {
+            const tarefas = this.state.tarefas.slice();
+            //Remove do index 1 
+            tarefas.splice(index, 1);
+            this.setState({tarefas});
+        }
+
+        this.editTarefa = (index, valor) => {
+            const tarefas = this.state.tarefas.slice();
+            tarefas[index] = valor;
+            this.setState({tarefas});
+        }
     }
 
     render(){
@@ -34,7 +47,8 @@ export default class ListaContainer extends React.Component{
                 tarefas={this.state.tarefas}
                 novaTarefa={this.state.novaTarefa}
                 onChange={this.onChange}
-                addTarefa={this.addTarefa} />
+                addTarefa={this.addTarefa} 
+                removeTarefa={this.removeTarefa}/>
         )
     }
 }
@@ -46,7 +60,12 @@ const ListaView = (props) => (
         <input type="text" name="novaTarefa" value={props.novaTarefa} onChange={props.onChange} />
         <button onClick={props.addTarefa}>Add</button>
         {
-            props.tarefas.map((tarefa, index) => <p>{index+1} - {tarefa}</p>)
+            props.tarefas.map((tarefa, index) => (
+                <p>{
+                    index+1} - {tarefa}
+                    <span style={{cursor: 'pointer'}} onClick={() => props.removeTarefa(index)}> Excluir</span>
+                </p>)
+            )
         }
     </div>
 );
