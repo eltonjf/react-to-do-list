@@ -48,11 +48,65 @@ export default class ListaContainer extends React.Component{
                 novaTarefa={this.state.novaTarefa}
                 onChange={this.onChange}
                 addTarefa={this.addTarefa} 
-                removeTarefa={this.removeTarefa}/>
+                removeTarefa={this.removeTarefa}
+                editTarefa={this.editTarefa}
+                />
         )
     }
 }
 
+class ListaViewItem extends React.Component {
+    
+        constructor(props){
+            super(props);
+            this.state={
+                edit: false,
+                texto: props.tarefa,    
+            }
+    
+            this.removeTarefa = () => {
+                this.props.removeTarefa(this.props.index);
+            }
+    
+            this.editTarefa = () => {
+                this.props.editTarefa(this.props.index, this.state.texto);
+                this.setState({edit: false});
+            }
+    
+            this.abrirForm = () =>{
+                this.setState({edit: true});
+            }
+    
+            this.fecharForm = () => {
+                this.setState({edit:false});
+            }
+
+            this.onChange = (ev) =>{
+                this.setState({texto: ev.target.value});
+            }
+    
+        }   
+
+        render(){
+            if(!this.state.edit){
+                return(
+                    <p>
+                        {this.props.index+1} - {this.props.tarefa}
+                        <span style={{cursor: 'pointer'}} onClick={this.abrirForm}> Alterar</span>
+                        <span style={{cursor: 'pointer'}} onClick={this.removeTarefa}> Excluir</span>
+                    </p>    
+                );
+            }
+            return(
+                <div>
+                    {this.props.index+1} <input value={this.state.texto} onChange={this.onChange} />
+                    <span style={{cursor: 'pointer'}} onClick={this.editTarefa}> Salvar</span>
+                    <span style={{cursor: 'pointer'}} onClick={this.fecharForm}> Cancelar</span>
+                </div>
+            );
+        }
+    
+    }
 
 const ListaView = (props) => (
     <div>
@@ -61,11 +115,12 @@ const ListaView = (props) => (
         <button onClick={props.addTarefa}>Add</button>
         {
             props.tarefas.map((tarefa, index) => (
-                <p>{
-                    index+1} - {tarefa}
-                    <span style={{cursor: 'pointer'}} onClick={() => props.removeTarefa(index)}> Excluir</span>
-                </p>)
-            )
+               <ListaViewItem key={index}
+                    tarefa={tarefa}
+                    index={index}
+                    removeTarefa={props.removeTarefa}
+                    editTarefa={props.editTarefa} />
+            ))
         }
     </div>
 );

@@ -14,7 +14,7 @@ export default class ListaViewItem extends React.Component {
         }
 
         this.editTarefa = () => {
-            this.props.editTarefa(this.props.index, this.state,texto);
+            this.props.editTarefa(this.props.index, this.state.texto);
             this.setState({edit: false});
         }
 
@@ -26,6 +26,6 @@ export default class ListaViewItem extends React.Component {
             this.setState({edit:false});
         }
 
-    }
+    }   
 
 }
